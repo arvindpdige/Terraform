@@ -30,5 +30,7 @@ resource "azurerm_key_vault" "key_vault" {
        "ListIssuers", "SetIssuers", "DeleteIssuers"
     ]
   }
+  public_network_access_enabled = true
+    
 
 }
