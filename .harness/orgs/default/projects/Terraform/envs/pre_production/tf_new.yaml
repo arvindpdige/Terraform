@@ -1,0 +1,8 @@
+environment:
+  name: tf_new
+  identifier: tf_new
+  description: ""
+  tags: {}
+  type: PreProduction
+  orgIdentifier: default
+  projectIdentifier: Terraform
