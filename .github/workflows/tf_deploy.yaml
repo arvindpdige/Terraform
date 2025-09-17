@@ -83,6 +83,9 @@ jobs:
     #   uses: actions/download-artifact@v4
     #   with:
     #     name: tfplan-artifacts
+    
+    - name: Terraform Init
+      run: terraform init
 
     - name: Terraform Plan
       run: terraform plan -input=false -out=tfplan
