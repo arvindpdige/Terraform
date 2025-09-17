@@ -14,6 +14,7 @@ resource "azurerm_linux_web_app" "app_linux" {
   service_plan_id     = azurerm_service_plan.asp.id
   https_only          = true
   site_config {
+    always_on = false
     application_stack {
       node_version = "20-lts"
     }
