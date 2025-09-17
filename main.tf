@@ -1,6 +1,6 @@
 
 
-resource "azurerm_resource_group" "rg" {
+resource "azurerm_resource_group" "rgaction" {
   name     = "${var.prefix}-rg"
   location = var.location
 
