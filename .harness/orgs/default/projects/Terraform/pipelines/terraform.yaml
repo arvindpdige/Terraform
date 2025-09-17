@@ -1,0 +1,115 @@
+pipeline:
+  name: terraform
+  identifier: terraform
+  projectIdentifier: Terraform
+  orgIdentifier: default
+  tags: {}
+  stages:
+    - stage:
+        name: terraform
+        identifier: terraform
+        description: ""
+        type: CI
+        spec:
+          cloneCodebase: true
+          caching:
+            enabled: true
+            override: true
+          buildIntelligence:
+            enabled: true
+          platform:
+            os: Linux
+            arch: Amd64
+          runtime:
+            type: Docker
+            spec: {}
+          execution:
+            steps:
+              - step:
+                  type: Gitleaks
+                  name: Gitleaks_1
+                  identifier: Gitleaks_1
+                  spec:
+                    mode: orchestration
+                    config: default
+                    target:
+                      type: repository
+                      detection: auto
+                    advanced:
+                      log:
+                        level: info
+    - stage:
+        name: tf
+        identifier: tf
+        description: ""
+        type: Custom
+        spec:
+          execution:
+            steps:
+              - step:
+                  type: TerraformPlan
+                  name: TerraformPlan
+                  identifier: TerraformPlan
+                  spec:
+                    provisionerIdentifier: tfinitplan
+                    configuration:
+                      command: Apply
+                      configFiles:
+                        store:
+                          spec:
+                            connectorRef: account.Github
+                            repoName: Terraform
+                            gitFetchType: Branch
+                            branch: harness_tf
+                            folderPath: .
+                          type: Github
+                      providerCredential:
+                        type: Azure
+                        spec:
+                          connectorRef: azure
+                          subscriptionId: 5c2c0a55-f337-4092-82d6-22d6323971ed
+                      backendConfig:
+                        type: Inline
+                        spec:
+                          content: |-
+                            terraform {
+                              backend "azurerm" {
+                                
+                                resource_group_name  = "backend_tf_rg"
+                                storage_account_name = "mystoragefortf"
+                                container_name       = "tfstate"
+                                key                  = "dev.terraform.tfstate"
+                              }
+                            }
+                      commandFlags:
+                        - commandType: INIT
+                          flag: ""
+                        - commandType: PLAN
+                          flag: ""
+                      varFiles:
+                        - varFile:
+                            type: Remote
+                            identifier: terraform.tfvars
+                            spec:
+                              store:
+                                type: Github
+                                spec:
+                                  gitFetchType: Branch
+                                  repoName: Terraform
+                                  branch: harness_tf
+                                  paths:
+                                    - ./
+                                  connectorRef: account.Github
+                      secretManagerRef: harnessSecretManager
+                      exportTerraformPlanJson: true
+                      storeTfPlanOnDelegate: false
+                      exportTerraformHumanReadablePlan: true
+                      skipRefreshCommand: true
+                  timeout: 10m
+        tags: {}
+  properties:
+    ci:
+      codebase:
+        connectorRef: account.Github
+        repoName: Terraform
+        build: <+input>
