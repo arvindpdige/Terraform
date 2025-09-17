@@ -50,8 +50,11 @@ jobs:
     - name: Upload Terraform Plan
       uses: actions/upload-artifact@v4
       with:
-        name: tfplan
-        path: tfplan
+        name: tfplan-artifacts
+        path: |
+        tfplan
+        .terraform.lock.hcl
+        .terraform/
 
   apply:
     name: 'Terraform Apply'
@@ -79,7 +82,7 @@ jobs:
     - name: Download Terraform Plan
       uses: actions/download-artifact@v4
       with:
-        name: tfplan
+        name: tfplan-artifacts
 
 
     - name: Terraform Apply
