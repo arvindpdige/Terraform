@@ -6,39 +6,6 @@ pipeline:
   tags: {}
   stages:
     - stage:
-        name: securityScan
-        identifier: securityScan
-        description: ""
-        type: CI
-        spec:
-          cloneCodebase: true
-          caching:
-            enabled: true
-            override: true
-          buildIntelligence:
-            enabled: true
-          platform:
-            os: Linux
-            arch: Amd64
-          runtime:
-            type: Docker
-            spec: {}
-          execution:
-            steps:
-              - step:
-                  type: Gitleaks
-                  name: Gitleaks_1
-                  identifier: Gitleaks_1
-                  spec:
-                    mode: orchestration
-                    config: default
-                    target:
-                      type: repository
-                      detection: auto
-                    advanced:
-                      log:
-                        level: info
-    - stage:
         name: tf
         identifier: tf
         description: ""
