@@ -47,14 +47,14 @@ jobs:
       run: terraform plan -input=false -out=tfplan
     
     # Upload the Terraform plan file as an artifact for use in the "Terraform Apply" job
-    - name: Upload Terraform Plan
-      uses: actions/upload-artifact@v4
-      with:
-        name: tfplan-artifacts
-        path: |
-            tfplan
-            .terraform.lock.hcl
-            .terraform/
+    # - name: Upload Terraform Plan
+    #   uses: actions/upload-artifact@v4
+    #   with:
+    #     name: tfplan-artifacts
+    #     path: |
+    #         tfplan
+    #         .terraform.lock.hcl
+    #         .terraform/
 
   apply:
     name: 'Terraform Apply'
@@ -78,12 +78,14 @@ jobs:
       with:
         cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
     
-    # Download the Terraform plan file artifact that was uploaded in the "Terraform Plan" job
-    - name: Download Terraform Plan
-      uses: actions/download-artifact@v4
-      with:
-        name: tfplan-artifacts
+    # # Download the Terraform plan file artifact that was uploaded in the "Terraform Plan" job
+    # - name: Download Terraform Plan
+    #   uses: actions/download-artifact@v4
+    #   with:
+    #     name: tfplan-artifacts
 
+    - name: Terraform Plan
+      run: terraform plan -input=false -out=tfplan
 
     - name: Terraform Apply
       if: github.ref == 'refs/heads/harness_tf' && github.event_name == 'push'
