@@ -19,11 +19,11 @@ resource "azurerm_linux_web_app" "app_linux" {
 
   app_settings = {
     "WEBSITES_ENABLE_APP_SERVICE_STORAGE" = "false"
-    "SCM_DO_BUILD_DURING_DEPLOYMENT" = true
-    "WEBSITE_LOCAL_CACHE_OPTION" = "Never"
+    "SCM_DO_BUILD_DURING_DEPLOYMENT"      = true
+    "WEBSITE_LOCAL_CACHE_OPTION"          = "Never"
   }
   identity {
     type = "SystemAssigned"
-    }
-    
+  }
+
 }

@@ -9,16 +9,16 @@ resource "azurerm_key_vault" "key_vault" {
   soft_delete_retention_days  = 7
   purge_protection_enabled    = false
   tags                        = var.tags
-  sku_name = "standard"
-  
+  sku_name                    = "standard"
+
   access_policy {
     tenant_id = data.azurerm_client_config.current.tenant_id
     object_id = data.azurerm_client_config.current.object_id
 
     key_permissions = [
-      "Get", "List", "Update", "Create", "Import", "Delete", "Recover", "Backup", "Restore", "Decrypt", "Encrypt", 
+      "Get", "List", "Update", "Create", "Import", "Delete", "Recover", "Backup", "Restore", "Decrypt", "Encrypt",
       "UnwrapKey", "WrapKey", "Verify", "Sign", "Purge", "Release", "Rotate", "GetRotationPolicy",
-       "SetRotationPolicy"
+      "SetRotationPolicy"
     ]
 
     secret_permissions = [
@@ -27,10 +27,10 @@ resource "azurerm_key_vault" "key_vault" {
     certificate_permissions = [
       "Get", "List", "Create", "Delete", "Update", "Import", "Recover", "Purge",
       "Backup", "Restore", "ManageContacts", "ManageIssuers", "GetIssuers",
-       "ListIssuers", "SetIssuers", "DeleteIssuers"
+      "ListIssuers", "SetIssuers", "DeleteIssuers"
     ]
   }
   public_network_access_enabled = true
-    
+
 
 }
