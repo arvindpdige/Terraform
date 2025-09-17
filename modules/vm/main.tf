@@ -34,5 +34,5 @@ resource "azurerm_windows_virtual_machine" "vm" {
     sku       = var.vm_sku
     version   = "latest"
   }
-  custom_data = filebase64("script.ps1")
+  custom_data = filebase64("./script.ps1")
 }
