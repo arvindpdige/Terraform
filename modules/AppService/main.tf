@@ -12,11 +12,15 @@ resource "azurerm_linux_web_app" "app_linux" {
   location            = azurerm_service_plan.asp.location
   resource_group_name = azurerm_service_plan.asp.resource_group_name
   service_plan_id     = azurerm_service_plan.asp.id
-
+  https_only          = true
   site_config {
-    linux_fx_version = "NODE|20-lts"
+    always_on = true
+    application_stack {
+      node_version = "20-lts"
+    }
+    
   }
-
+  
   app_settings = {
     "WEBSITES_ENABLE_APP_SERVICE_STORAGE" = "false"
     "SCM_DO_BUILD_DURING_DEPLOYMENT"      = true
@@ -26,4 +30,12 @@ resource "azurerm_linux_web_app" "app_linux" {
     type = "SystemAssigned"
   }
 
+}
+
+resource "azurerm_app_service_source_control" "scm" {
+  app_id             = azurerm_linux_web_app.app_linux.id
+  repo_url           = "https://github.com/Azure-Samples/nodejs-docs-hello-world"
+  branch             = "main"
+  use_manual_integration = true
+  use_mercurial      = false
 }
