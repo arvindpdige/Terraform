@@ -1,0 +1,15 @@
+infrastructureDefinition:
+  name: tfifras
+  identifier: tfifras
+  orgIdentifier: default
+  projectIdentifier: Terraform
+  environmentRef: tf_new
+  deploymentType: Ssh
+  type: SshWinRmAzure
+  spec:
+    credentialsRef: userpass
+    connectorRef: azure
+    subscriptionId: 5c2c0a55-f337-4092-82d6-22d6323971ed
+    resourceGroup: ado
+    hostConnectionType: Hostname
+  allowSimultaneousDeployments: false
