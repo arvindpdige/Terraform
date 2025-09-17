@@ -52,9 +52,9 @@ jobs:
       with:
         name: tfplan-artifacts
         path: |
-        tfplan
-        .terraform.lock.hcl
-        .terraform/
+            tfplan
+            .terraform.lock.hcl
+            .terraform/
 
   apply:
     name: 'Terraform Apply'
