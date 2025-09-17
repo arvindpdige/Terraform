@@ -6,8 +6,8 @@ pipeline:
   tags: {}
   stages:
     - stage:
-        name: terraform
-        identifier: terraform
+        name: securityScan
+        identifier: securityScan
         description: ""
         type: CI
         spec:
@@ -106,6 +106,12 @@ pipeline:
                       exportTerraformHumanReadablePlan: true
                       skipRefreshCommand: true
                   timeout: 10m
+          environment:
+            environmentRef: tf_new
+            gitBranch: harness_tf
+            deployToAll: false
+            infrastructureDefinitions:
+              - identifier: tfifras
         tags: {}
   properties:
     ci:
