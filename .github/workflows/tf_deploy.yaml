@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   terraform:
-    name: 'Terraform'
+    name: 'Terraform Init, Format, and Plan'
     runs-on: ubuntu-latest
     env:
         ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}             
@@ -18,8 +18,6 @@ jobs:
         ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }} 
         ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
 
-    environment:
-      name: development
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
       run:
@@ -47,9 +45,43 @@ jobs:
     # Generates an execution plan for Terraform
     - name: Terraform Plan
       run: terraform plan -input=false -out=tfplan
+    
+    # Upload the Terraform plan file as an artifact for use in the "Terraform Apply" job
+    - name: Upload Terraform Plan
+      uses: actions/upload-artifact@v3
+      with:
+        name: tfplan
+        path: tfplan
 
-      # On push to "main", build or change infrastructure according to Terraform configuration files
-      # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
+  apply:
+    name: 'Terraform Apply'
+    runs-on: ubuntu-latest
+    env:
+        ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}             
+        ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}     
+        ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }} 
+        ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+    needs: terraform
+    environment:
+      name: development
+    
+    steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+    
+    # Download the Terraform plan file artifact that was uploaded in the "Terraform Plan" job
+    - name: Download Terraform Plan
+      uses: actions/download-artifact@v3
+      with:
+        name: tfplan
+
+
     - name: Terraform Apply
-      if: github.ref == 'refs/heads/"harness_tf"' && github.event_name == 'push'
-      run: terraform apply -auto-approve -input=false
+      if: github.ref == 'refs/heads/harness_tf' && github.event_name == 'push'
+      run: terraform apply -auto-approve tfplan
