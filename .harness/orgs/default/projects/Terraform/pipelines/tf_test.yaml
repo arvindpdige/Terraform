@@ -17,7 +17,7 @@ pipeline:
                   name: TerraformPlan
                   identifier: TerraformPlan
                   spec:
-                    provisionerIdentifier: terraform_01
+                    provisionerIdentifier: <+input>
                     configuration:
                       command: Apply
                       configFiles:
@@ -31,8 +31,8 @@ pipeline:
                       providerCredential:
                         type: Azure
                         spec:
-                          connectorRef: azure
-                          subscriptionId: 5c2c0a55-f337-4092-82d6-22d6323971ed
+                          connectorRef: <+input>
+                          subscriptionId: <+input>
                       secretManagerRef: harnessSecretManager
                       skipRefreshCommand: false
                   timeout: 10m
@@ -56,7 +56,7 @@ pipeline:
                   name: TerraformApply
                   identifier: TerraformApply
                   spec:
-                    provisionerIdentifier: terraform_01
+                    provisionerIdentifier: <+input>
                     configuration:
                       type: InheritFromPlan
                   timeout: 10m
@@ -80,7 +80,7 @@ pipeline:
                   name: TerraformDestroy_1
                   identifier: TerraformDestroy_1
                   spec:
-                    provisionerIdentifier: terraform_01
+                    provisionerIdentifier: <+input>
                     configuration:
                       type: InheritFromApply
                   timeout: 10m
