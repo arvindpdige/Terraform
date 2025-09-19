@@ -14,8 +14,8 @@ pipeline:
             steps:
               - step:
                   type: TerraformPlan
-                  name: TerraformPlan_1
-                  identifier: TerraformPlan_1
+                  name: TerraformPlan
+                  identifier: TerraformPlan
                   spec:
                     provisionerIdentifier: terraform_01
                     configuration:
@@ -35,6 +35,15 @@ pipeline:
                           subscriptionId: 5c2c0a55-f337-4092-82d6-22d6323971ed
                       secretManagerRef: harnessSecretManager
                       skipRefreshCommand: false
+                  timeout: 10m
+              - step:
+                  type: TerraformApply
+                  name: TerraformApply
+                  identifier: TerraformApply
+                  spec:
+                    provisionerIdentifier: terraform_01
+                    configuration:
+                      type: InheritFromPlan
                   timeout: 10m
         tags: {}
         when:
