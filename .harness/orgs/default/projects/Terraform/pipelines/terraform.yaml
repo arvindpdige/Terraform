@@ -86,3 +86,4 @@ pipeline:
         connectorRef: account.Github
         repoName: Terraform
         build: <+input>
+  delegateSelectors: <+input>
