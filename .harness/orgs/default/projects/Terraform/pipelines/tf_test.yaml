@@ -1,0 +1,53 @@
+pipeline:
+  name: tf_test
+  identifier: tf_test
+  projectIdentifier: Terraform
+  orgIdentifier: default
+  stages:
+    - stage:
+        name: plan
+        identifier: plan
+        description: ""
+        type: Custom
+        spec:
+          execution:
+            steps:
+              - step:
+                  type: TerraformPlan
+                  name: TerraformPlan_1
+                  identifier: TerraformPlan_1
+                  spec:
+                    provisionerIdentifier: terraform_01
+                    configuration:
+                      command: Apply
+                      configFiles:
+                        store:
+                          spec:
+                            connectorRef: Terraformgithub
+                            gitFetchType: Branch
+                            branch: harness_tf
+                            folderPath: ./
+                          type: Github
+                      providerCredential:
+                        type: Azure
+                        spec:
+                          connectorRef: azure
+                          subscriptionId: 5c2c0a55-f337-4092-82d6-22d6323971ed
+                      secretManagerRef: harnessSecretManager
+                      skipRefreshCommand: false
+                  timeout: 10m
+        tags: {}
+        when:
+          pipelineStatus: Success
+        failureStrategies:
+          - onFailure:
+              errors:
+                - AllErrors
+              action:
+                type: MarkAsFailure
+  properties:
+    ci:
+      codebase:
+        connectorRef: Terraformgithub
+        build: <+input>
+        sparseCheckout: []
