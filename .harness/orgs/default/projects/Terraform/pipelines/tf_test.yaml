@@ -5,8 +5,8 @@ pipeline:
   orgIdentifier: default
   stages:
     - stage:
-        name: plan
-        identifier: plan
+        name: Terraform_Deploy
+        identifier: Terraform_Deploy
         description: ""
         type: Custom
         spec:
@@ -38,8 +38,8 @@ pipeline:
                   timeout: 10m
               - step:
                   type: HarnessApproval
-                  name: HarnessApproval_1
-                  identifier: HarnessApproval_1
+                  name: ApprovalForApply
+                  identifier: ApprovalForApply
                   spec:
                     approvalMessage: Please review the following information and approve the pipeline progression
                     includePipelineExecutionHistory: true
@@ -59,6 +59,30 @@ pipeline:
                     provisionerIdentifier: terraform_01
                     configuration:
                       type: InheritFromPlan
+                  timeout: 10m
+              - step:
+                  type: HarnessApproval
+                  name: ApprovalForDestroy
+                  identifier: ApprovalForDestroy
+                  spec:
+                    approvalMessage: Please review the following information and approve the pipeline progression
+                    includePipelineExecutionHistory: true
+                    isAutoRejectEnabled: false
+                    approvers:
+                      userGroups:
+                        - _project_all_users
+                      minimumCount: 1
+                      disallowPipelineExecutor: false
+                    approverInputs: []
+                  timeout: 1d
+              - step:
+                  type: TerraformDestroy
+                  name: TerraformDestroy_1
+                  identifier: TerraformDestroy_1
+                  spec:
+                    provisionerIdentifier: terraform_01
+                    configuration:
+                      type: InheritFromApply
                   timeout: 10m
         tags: {}
         when:
