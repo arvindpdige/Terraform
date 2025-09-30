@@ -29,13 +29,13 @@ module "virtual_machine" {
   depends_on          = [azurerm_resource_group.rg, module.virtual_network]
 }
 
-# module "KeyVault" {
-#   source              = "./modules/KeyVault"
-#   prefix              = var.prefix
-#   resource_group_name = azurerm_resource_group.rg.name
-#   location            = azurerm_resource_group.rg.location
-#   depends_on          = [azurerm_resource_group.rg]
-# }
+module "KeyVault" {
+  source              = "./modules/KeyVault"
+  prefix              = var.prefix
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
+  depends_on          = [azurerm_resource_group.rg]
+}
 
 # module "AppService" {
 #   source              = "./modules/AppService"
@@ -46,13 +46,13 @@ module "virtual_machine" {
 
 # }
 
-# module "ACR" {
-#   source              = "./modules/ACR"
-#   prefix              = var.prefix
-#   resource_group_name = azurerm_resource_group.rg.name
-#   location            = azurerm_resource_group.rg.location
-#   depends_on          = [azurerm_resource_group.rg]
+module "ACR" {
+  source              = "./modules/ACR"
+  prefix              = var.prefix
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
+  depends_on          = [azurerm_resource_group.rg]
 
-# }
+}
 
 
