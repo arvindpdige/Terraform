@@ -99,3 +99,19 @@ pipeline:
         connectorRef: Terraformgithub
         build: <+input>
         sparseCheckout: []
+  notificationRules:
+    - name: Terraform_mail
+      identifier: Terraform_mail
+      pipelineEvents:
+        - type: PipelineFailed
+        - type: StageFailed
+          forStages:
+            - AllStages
+        - type: StepFailed
+      notificationMethod:
+        type: Email
+        spec:
+          userGroups: []
+          recipients:
+            - arvindpdige@gmail.com
+      enabled: true
