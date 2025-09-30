@@ -2,8 +2,10 @@
 name: 'Terraform'
 
 on:
-#   push:
-#     branches: [ "harness_tf" ]
+  push:
+    branches: [ "harness_tf" ]
+  
+  workflow_dispatch:
 
 permissions:
   contents: read
