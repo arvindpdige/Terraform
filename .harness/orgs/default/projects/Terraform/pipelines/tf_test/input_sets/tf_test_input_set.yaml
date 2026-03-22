@@ -1,0 +1,39 @@
+inputSet:
+  name: tf_test_input_set
+  identifier: tf_test_input_set
+  orgIdentifier: default
+  projectIdentifier: Terraform
+  pipeline:
+    identifier: tf_test
+    stages:
+      - stage:
+          identifier: Terraform_Deploy
+          type: Custom
+          spec:
+            execution:
+              steps:
+                - step:
+                    identifier: TerraformPlan
+                    type: TerraformPlan
+                    spec:
+                      provisionerIdentifier: terraform_plan_01
+                      configuration:
+                        providerCredential:
+                          type: Azure
+                          spec:
+                            connectorRef: azure
+                            subscriptionId: 5c2c0a55-f337-4092-82d6-22d6323971ed
+                - step:
+                    identifier: TerraformApply
+                    type: TerraformApply
+                    spec:
+                      provisionerIdentifier: terraform_plan_01
+                - step:
+                    identifier: TerraformDestroy_1
+                    type: TerraformDestroy
+                    spec:
+                      provisionerIdentifier: terraform_plan_01
+    properties:
+      ci:
+        codebase:
+          build: <+input>

@@ -1,0 +1,14 @@
+inputSet:
+  name: tf_inputsets
+  identifier: tf_inputsets
+  orgIdentifier: default
+  projectIdentifier: Terraform
+  pipeline:
+    identifier: terraform
+    properties:
+      ci:
+        codebase:
+          build: <+input>
+    delegateSelectors:
+      - linux-amd64
+      - docker-delegate
